@@ -58,7 +58,7 @@ function App() {
           alt="Offline"
           className="w-32 h-32 mb-6 opacity-90"
         />
-        <h2 className="flex items-center gap-2 text-2xl font-semibold mb-2">
+        <h2 className="flex items-center gap-2 text-2xl font-semibold">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -67,12 +67,15 @@ function App() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="w-6 h-6"
+            className="w-5 h-5"
           >
+            {/* WiFi waves */}
             <path d="M5 12.55a11 11 0 0 1 14.08 0" />
             <path d="M8.5 16.05a6 6 0 0 1 7 0" />
             <path d="M12 20h.01" />
-            <line x1="2" y1="2" x2="22" y2="22" />
+
+            {/* SHORT offline slash */}
+            <line x1="7" y1="7" x2="17" y2="17" />
           </svg>
 
           <span>You are offline</span>
