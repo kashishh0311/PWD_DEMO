@@ -1,20 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 function App() {
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+
   const features = [
     { title: "App Installation", desc: "Install like a mobile app" },
     { title: "Offline Support", desc: "Works without internet" },
     { title: "Push Notifications", desc: "Engage users easily" },
   ];
 
+  // Capture install event
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener("beforeinstallprompt", handler);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+    };
+  }, []);
+
+  // Install app on button click
+  const handleInstall = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    setDeferredPrompt(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-white">
       {/* Navbar */}
       <nav className="flex flex-col gap-4 sm:flex-row justify-between items-center px-10 py-6">
         <h1 className="text-2xl font-bold tracking-wide">PWA Demo</h1>
-        <button className="px-5 py-2 rounded-lg bg-white text-black font-medium hover:bg-gray-200 transition">
-          Install App
-        </button>
+
+        {deferredPrompt && (
+          <button
+            onClick={handleInstall}
+            className="px-5 py-2 rounded-lg bg-white text-black font-medium hover:bg-gray-200 transition"
+          >
+            Install App
+          </button>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -32,9 +63,14 @@ function App() {
             Enable Notifications
           </button>
 
-          <button className="px-8 py-4 rounded-xl border border-white hover:bg-white hover:text-black transition shadow-lg">
-            Download
-          </button>
+          {deferredPrompt && (
+            <button
+              onClick={handleInstall}
+              className="px-8 py-4 rounded-xl border border-white hover:bg-white hover:text-black transition shadow-lg"
+            >
+              Download
+            </button>
+          )}
         </div>
       </section>
 
