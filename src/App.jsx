@@ -5,28 +5,23 @@ import OfflineScreen from "./Components/OfflineScreen";
 import FeatureGrid from "./Components/FeatureGrid";
 import useOnlineStatus from "./hooks/useOnlineStatus";
 import features from "./data/features.json";
-import SplashScreen
- from "./Components/SplashScreen";
+import SplashScreen from "./Components/SplashScreen";
+
 function App() {
+  // All hooks must be at the top
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showSplash, setShowSplash] = useState(true);
+  const isOnline = useOnlineStatus(); // ✅ Moved before ANY return
 
-    useEffect(() => {
+  // Splash Timer
+  useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 1000); // 1 second
-
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
-  
-  if (showSplash) {
-    return <SplashScreen />;
-  }
 
-  // Reusable online/offline hook
-  const isOnline = useOnlineStatus();
-
-  // Capture install prompt
+  // Capture PWA install prompt
   useEffect(() => {
     const handleInstallPrompt = (e) => {
       e.preventDefault();
@@ -40,7 +35,7 @@ function App() {
     };
   }, []);
 
-  // Install handler
+  // Install button
   const handleInstall = async () => {
     if (!deferredPrompt) return;
 
@@ -49,19 +44,19 @@ function App() {
     setDeferredPrompt(null);
   };
 
+  // Now returns are safe, order does NOT break Hooks
+  if (showSplash) return <SplashScreen />;
   if (!isOnline) return <OfflineScreen />;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+
       <Navbar deferredPrompt={deferredPrompt} onInstall={handleInstall} />
 
       <Hero deferredPrompt={deferredPrompt} onInstall={handleInstall} />
 
-      {/* Features from JSON */}
-    <FeatureGrid features={features} />
+      <FeatureGrid features={features} />
 
-
-    {/* footer */}
       <footer className="text-center text-gray-400 mt-24 pb-8">
         © 2026 Simple PWA Demo
       </footer>
