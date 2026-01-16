@@ -2,6 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-.app-icon {
- border-radius: 20px;
-}
