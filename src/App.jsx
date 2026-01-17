@@ -14,14 +14,13 @@ function App() {
 
 useEffect(() => {
   async function initAuth() {
-    const hasPasskey = localStorage.getItem("passkey-registered");
+    const credId = localStorage.getItem("passkey-cred-id");
 
-    if (!hasPasskey) {
-      const registered = await registerPasskey();
-      if (registered) {
-        localStorage.setItem("passkey-registered", "true");
-      }
+    if (!credId) {
+      // First time - register
+      await registerPasskey();
     } else {
+      // Returning user - authenticate
       await authenticateUser();
     }
   }

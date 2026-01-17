@@ -19,8 +19,8 @@ export async function registerPasskey() {
       ],
 
       authenticatorSelection: {
-        authenticatorAttachment: "platform", // 🔥 ONLY this device
-        userVerification: "required",        // 🔥 MUST use biometrics or PIN
+        authenticatorAttachment: "platform",
+        userVerification: "required",
       },
 
       timeout: 60000,
@@ -28,9 +28,17 @@ export async function registerPasskey() {
     };
 
     const cred = await navigator.credentials.create({ publicKey });
+    
+    if (cred) {
+      // ✅ Store the credential ID for future authentications
+      const credId = btoa(String.fromCharCode(...new Uint8Array(cred.rawId)));
+      localStorage.setItem("passkey-cred-id", credId);
+      localStorage.setItem("passkey-registered", "true");
+    }
+    
     return !!cred;
   } catch (e) {
-    console.error(e);
+    console.error("Registration failed:", e);
     return false;
   }
 }
