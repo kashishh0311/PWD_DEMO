@@ -5,12 +5,16 @@ import OfflineScreen from "./Components/OfflineScreen";
 import FeatureGrid from "./Components/FeatureGrid";
 import useOnlineStatus from "./hooks/useOnlineStatus";
 import features from "./data/features.json";
+import { authenticateUser } from "./auth";   // <-- NEW IMPORT
 
 function App() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
-
-  // Reusable online/offline hook
   const isOnline = useOnlineStatus();
+
+  // 🔐 Run FaceID / Fingerprint / PIN on app launch
+  useEffect(() => {
+    authenticateUser();
+  }, []);
 
   // Capture install prompt
   useEffect(() => {
@@ -43,11 +47,8 @@ function App() {
 
       <Hero deferredPrompt={deferredPrompt} onInstall={handleInstall} />
 
-      {/* Features from JSON */}
-    <FeatureGrid features={features} />
+      <FeatureGrid features={features} />
 
-
-    {/* footer */}
       <footer className="text-center text-gray-400 mt-24 pb-8">
         © 2026 Simple PWA Demo
       </footer>
