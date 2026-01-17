@@ -5,7 +5,7 @@ import OfflineScreen from "./Components/OfflineScreen";
 import FeatureGrid from "./Components/FeatureGrid";
 import useOnlineStatus from "./hooks/useOnlineStatus";
 import features from "./data/features.json";
-import { authenticateUser } from "./auth";   // <-- NEW IMPORT
+import { authenticateUser } from "./utils/auth"
 
 function App() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
