@@ -6,15 +6,28 @@ import FeatureGrid from "./Components/FeatureGrid";
 import useOnlineStatus from "./hooks/useOnlineStatus";
 import features from "./data/features.json";
 import { authenticateUser } from "./utils/auth"
+import { registerPasskey } from "./utils/registerPasskey";
 
 function App() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const isOnline = useOnlineStatus();
 
-  // 🔐 Run FaceID / Fingerprint / PIN on app launch
-  useEffect(() => {
-    authenticateUser();
-  }, []);
+useEffect(() => {
+  async function initAuth() {
+    const hasPasskey = localStorage.getItem("passkey-registered");
+
+    if (!hasPasskey) {
+      const registered = await registerPasskey();
+      if (registered) {
+        localStorage.setItem("passkey-registered", "true");
+      }
+    } else {
+      await authenticateUser();
+    }
+  }
+
+  initAuth();
+}, []);
 
   // Capture install prompt
   useEffect(() => {
