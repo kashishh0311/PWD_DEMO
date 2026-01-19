@@ -1,4 +1,3 @@
-// utils/registerPasskey.js
 export async function registerPasskey() {
   try {
     const publicKey = {

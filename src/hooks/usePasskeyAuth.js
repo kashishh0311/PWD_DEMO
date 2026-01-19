@@ -1,18 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { authenticateUser } from "../utils/auth";
-import { registerPasskey } from "../utils/registerPasskey";
-
-// Check if running as installed PWA
-export const isPWA = () =>
-  window.matchMedia("(display-mode: standalone)").matches ||
-  window.navigator.standalone === true;
-
 export default function usePasskeyAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const isAuthenticating = useRef(false);
 
   const triggerAuth = async () => {
-    if (isAuthenticating.current || !isPWA()) return; // ⛔ Only inside PWA
+    if (isAuthenticating.current || !isPWA()) return; 
     isAuthenticating.current = true;
 
     try {
@@ -45,7 +36,10 @@ export default function usePasskeyAuth() {
 
   useEffect(() => {
     const onVisible = () => {
-      if (!isPWA()) return;
+      // Only trigger if document was hidden and is now visible
+      if (document.visibilityState === 'visible' && !isPWA()) return;
+      if (document.visibilityState !== 'visible') return;
+      
       setIsAuthenticated(false);
       isAuthenticating.current = false;
       setTimeout(triggerAuth, 100);

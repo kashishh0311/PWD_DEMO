@@ -1,4 +1,3 @@
-// utils/auth.js
 export async function authenticateUser() {
   try {
     const storedCredId = localStorage.getItem("passkey-cred-id");
