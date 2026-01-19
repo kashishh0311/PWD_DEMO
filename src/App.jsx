@@ -4,7 +4,6 @@ import Navbar from "./Components/Navbar";
 import FeatureGrid from "./Components/FeatureGrid";
 import Footer from "./Components/Footer";
 import features from "./data/features.json";
-
 import usePasskeyAuth from "./hooks/usePasskeyAuth";
 import LockScreen from "./Components/LockScreen";
 
@@ -12,7 +11,7 @@ function App() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const { isAuthenticated, isPWA } = usePasskeyAuth();
 
-  // PWA install prompt
+  // PWA install 
   useEffect(() => {
     const handleInstallPrompt = (e) => {
       e.preventDefault();
@@ -33,16 +32,14 @@ function App() {
 
   return (
     <LockScreen isAuthenticated={isAuthenticated} isPWA={isPWA()}>
-      
-      {/* Entire app layout in one place */}
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 to-slate-800 text-white">
 
         {/* Header */}
         <Navbar deferredPrompt={deferredPrompt} onInstall={handleInstall} />
 
-        {/* Main content (auto expands) */}
+        {/* Main content */}
         <main className="flex-grow">
-          <Hero deferredPrompt={deferredPrompt} onInstall={handleInstall} />
+          <Hero />
           <FeatureGrid features={features} />
         </main>
 
@@ -50,7 +47,6 @@ function App() {
         <Footer />
 
       </div>
-
     </LockScreen>
   );
 }
